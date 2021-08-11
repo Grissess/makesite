@@ -1,0 +1,8 @@
+/* This stylesheet is included by default everywhere; you can use it for
+ * theming. Nothing stops you from changing this in lib/head.m4, of course,
+ * such as including more files or not including this one. */
+
+body {
+	background-color: #ddd;
+	color: #222;
+}
