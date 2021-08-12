@@ -28,7 +28,7 @@ $(BUILDDIR):
 
 $(BUILDS): $(BUILDDIR)/%.html: $(SRCDIR)/%.m4
 	mkdir -p $$(dirname "$@")
-	"$(M4)" $(M4FLAGS) -DMS_FILE="$?" "$(INIFILE)" "$^" > "$@"
+	"$(M4)" $(M4FLAGS) -DMS_FILE="$?" -DMS_VAR_BUILDS="$(BUILDS)" "$(INIFILE)" "$^" > "$@"
 
 $(STATICS): $(BUILDDIR)/%: $(STATICDIR)/%
 	mkdir -p $$(dirname "$@")
