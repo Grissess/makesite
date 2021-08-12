@@ -3,8 +3,14 @@ m4_define(`MS_NL', `
 ')
 m4_define(`MS_HEAD', m4_include(`lib/head.m4'))
 
+m4_dnl Strip the build directory part of the path.
+m4_define(`MS_STRIP_BUILD', `m4_substr(`$1', m4_incr(m4_len(m4_defn(`MS_BUILDDIR'))))')
+
+m4_dnl Append to a comma-separated string array
+m4_define(`MS_APPEND', `m4_ifdef(`$1', `m4_define(`$1', m4_defn(`$1')`,'$2)', `m4_define(`$1', $2)')')
+
 m4_dnl A path relative to the build root.
-m4_define(`MS_REL_PATH', m4_substr(MS_FILE, m4_incr(m4_index(MS_FILE, `/'))))
+m4_define(`MS_REL_PATH', MS_STRIP_BUILD(m4_defn(`MS_FILE')))
 
 m4_dnl A relative path that resolves to the build root. This is . when we're in
 m4_dnl the root, and the correct number of (../) if we're not. Useful for
@@ -28,11 +34,8 @@ $0(`$1', `$2', m4_shift(m4_shift(m4_shift($@))))')')
 m4_dnl This variable contains a comma-separated list of all the pages that will
 m4_dnl be built, relative to MS_ROOT (as if each were an MS_REL_PATH).
 m4_pushdef(`push_build', `m4_dnl
-m4_pushdef(`buildname', m4_substr(`$1', m4_incr(m4_index(`$1', `/'))))m4_dnl
-m4_ifdef(`MS_BUILDS',m4_dnl
-`m4_define(`MS_BUILDS', m4_defn(`MS_BUILDS')`,'m4_defn(`buildname'))',m4_dnl
-`m4_define(`MS_BUILDS', m4_defn(`buildname'))'m4_dnl
-)')
+m4_pushdef(`buildname', MS_STRIP_BUILD(`$1'))m4_dnl
+MS_APPEND(`MS_BUILDS', m4_defn(`buildname'))')
 
 m4_patsubst(m4_defn(`MS_VAR_BUILDS'), `[^ ]+', `push_build(`\&')')
 m4_popdef(`push_build')
